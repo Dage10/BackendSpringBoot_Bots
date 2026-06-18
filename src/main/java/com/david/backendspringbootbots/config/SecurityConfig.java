@@ -17,7 +17,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/health", "/api/users/**", "/error", "/api/sse/**").permitAll()
+                        .requestMatchers("/health", "/api/users/**", "/error", "/api/sse/**", "/api/bots/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex

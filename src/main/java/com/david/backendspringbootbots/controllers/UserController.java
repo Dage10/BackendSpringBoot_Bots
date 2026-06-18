@@ -8,6 +8,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,14 @@ import java.util.Optional;
 public class UserController {
     private final UserService userService;
     private final JwtService jwtService;
+    private final Environment environment;
+
+    private boolean isProd() {
+        for (String p : environment.getActiveProfiles()) {
+            if ("prod".equals(p)) return true;
+        }
+        return false;
+    }
 
     public record UserResponse(Long id, String username, String email) {}
 
@@ -54,8 +63,7 @@ public class UserController {
         cookie.setHttpOnly(true);
         cookie.setPath("/");
         cookie.setMaxAge(604800);
-        boolean isProd = "prod".equals(System.getenv("SPRING_PROFILES_ACTIVE"));
-        if (isProd) {
+        if (isProd()) {
             cookie.setSecure(true);
             cookie.setAttribute("SameSite", "None");
         } else {
@@ -74,9 +82,13 @@ public class UserController {
         cookie.setPath("/");
         cookie.setMaxAge(0);
 
-        boolean isProd = "prod".equals(System.getenv("SPRING_PROFILES_ACTIVE"));
-        if (isProd) cookie.setSecure(true);
-        cookie.setAttribute("SameSite", "Lax");
+        if (isProd()) {
+            cookie.setSecure(true);
+            cookie.setAttribute("SameSite", "None");
+        } else {
+            cookie.setSecure(false);
+            cookie.setAttribute("SameSite", "Lax");
+        }
         response.addCookie(cookie);
         return ResponseEntity.ok().build();
     }

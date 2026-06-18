@@ -24,6 +24,9 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+
 
 @RestController
 @RequestMapping("/api/bots")
@@ -45,7 +48,7 @@ public class BotController {
                 }
             }
         }
-        throw new RuntimeException("Unauthorized");
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized");
     }
 
     public record BotRequest(String name, Platform platform, TypeBot type,

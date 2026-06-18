@@ -19,6 +19,9 @@ public class UserService {
 
     public User register(String username,String email, String rawPassword) {
         List<String> errors = new ArrayList<>();
+        if (rawPassword == null || rawPassword.length() < 8) {
+            errors.add("Password must be at least 8 characters long");
+        }
         if (userRepository.findByUsername(username).isPresent()) {
             errors.add("Username already exists");
         }

@@ -8,7 +8,9 @@ import java.util.Base64;
 
 public class CryptoService {
     private static final String ENCRYPTION_ALGORITHM = "AES/GCM/NoPadding";
-    private static final byte[] ENCRYPTION_KEY_BYTES = "my_secret_key_very_long_32chars!".getBytes();
+    private static final byte[] ENCRYPTION_KEY_BYTES = (
+        System.getenv("CRYPTO_SECRET") != null ? System.getenv("CRYPTO_SECRET") : "my_secret_key_very_long_32chars!"
+    ).getBytes();
     private static final int AUTHENTICATION_TAG_LENGTH_BITS = 128;
     private static final int INITIALIZATION_VECTOR_LENGTH_BYTES = 12;
 

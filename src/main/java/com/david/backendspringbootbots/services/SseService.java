@@ -12,7 +12,7 @@ public class SseService {
     private final List<SseEmitter> emitters = new CopyOnWriteArrayList<>();
 
     public SseEmitter subscribe() {
-        SseEmitter emitter = new SseEmitter(0L); // never timeout
+        SseEmitter emitter = new SseEmitter(1800000L); // 30 min timeout
         emitters.add(emitter);
 
         emitter.onCompletion(() -> emitters.remove(emitter));

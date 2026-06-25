@@ -1,63 +1,62 @@
 package com.david.backendspringbootbots.controllers;
 
-import java.util.List;
-
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.david.backendspringbootbots.domain.Platform;
 import com.david.backendspringbootbots.domain.TypeBot;
 import com.david.backendspringbootbots.entities.Bot;
 import com.david.backendspringbootbots.entities.User;
-import com.david.backendspringbootbots.repositories.UserRepository;
+import com.david.backendspringbootbots.security.AuthService;
 import com.david.backendspringbootbots.services.BotService;
-import com.david.backendspringbootbots.services.JwtService;
-
-import io.jsonwebtoken.Claims;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
-
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/bots")
 @RequiredArgsConstructor
 public class BotController {
-    private final BotService botService;
-    private final JwtService jwtService;
-    private final UserRepository userRepository;
 
-    private User getUser(HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie c : cookies) {
-                if (c.getName().equals("token")) {
-                    Claims claims = jwtService.validateToken(c.getValue());
-                    return userRepository.findById(
-                            claims.get("id", Long.class)
-                    ).orElseThrow();
-                }
-            }
+    private final BotService botService;
+    private final AuthService authService;
+
+    public record BotRequest(
+            @NotBlank @Size(max = 80) String name,
+            @NotNull Platform platform,
+            @NotNull TypeBot type,
+            @NotBlank @Size(max = 500) String target,
+            @Size(max = 2000) String oauthToken,
+            @Size(max = 2000) String refreshToken,
+            @Size(max = 5000) String extraConfigJson
+    ) {}
+
+    public record MessageRequest(@NotBlank @Size(max = 2000) String message) {}
+
+    public record BotResponse(Long id, String name, Platform platform, TypeBot type, String target, Boolean state) {
+        static BotResponse from(Bot bot) {
+            return new BotResponse(bot.getId(), bot.getName(), bot.getPlatform(), bot.getType(), bot.getTarget(), bot.getState());
         }
-        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized");
     }
 
-    public record BotRequest(String name, Platform platform, TypeBot type,
-    String target, String oauthToken, String refreshToken, String extraConfigJson) {}
-
+    public record BotDetailResponse(
+            Long id, String name, Platform platform, TypeBot type, String target, Boolean state,
+            String oauthToken, String refreshToken, String extraConfigJson
+    ) {
+        static BotDetailResponse from(Bot bot) {
+            return new BotDetailResponse(
+                    bot.getId(), bot.getName(), bot.getPlatform(), bot.getType(), bot.getTarget(), bot.getState(),
+                    bot.getOauthToken(), bot.getRefreshToken(), bot.getExtraConfigJson()
+            );
+        }
+    }
 
     @PostMapping
-    public Bot create(@RequestBody BotRequest request, HttpServletRequest req) {
-        User user = getUser(req);
+    public BotResponse create(@Valid @RequestBody BotRequest request, HttpServletRequest req) {
+        User user = authService.requireUser(req);
 
         Bot bot = Bot.builder()
                 .name(request.name())
@@ -70,47 +69,40 @@ public class BotController {
                 .state(true)
                 .build();
 
-        return botService.create(user, bot);
+        return BotResponse.from(botService.create(user, bot));
+    }
+
+    @GetMapping
+    public List<BotResponse> listBots(HttpServletRequest req) {
+        return botService.getBotsByUser(authService.requireUser(req)).stream()
+                .map(BotResponse::from)
+                .toList();
+    }
+
+    @GetMapping("/{id}")
+    public BotDetailResponse getBot(@PathVariable Long id, HttpServletRequest req) {
+        return BotDetailResponse.from(botService.getByIdForUser(authService.requireUser(req), id));
     }
 
     @PostMapping("/{id}/send")
-    public void sendMessage(
-            @PathVariable Long id,
-            @RequestBody MessageRequest req,
-            HttpServletRequest request
-    ) {
-        User user = getUser(request);
+    public void sendMessage(@PathVariable Long id, @Valid @RequestBody MessageRequest request, HttpServletRequest req) {
+        User user = authService.requireUser(req);
         Bot bot = botService.getByIdForUser(user, id);
-
-        botService.updateMessage(bot, req.message());
+        botService.updateMessage(bot, request.message());
     }
 
-    public record MessageRequest(String message) {}
+    @PutMapping("/{id}")
+    public BotResponse update(@PathVariable Long id, @Valid @RequestBody BotRequest request, HttpServletRequest req) {
+        return BotResponse.from(botService.update(authService.requireUser(req), id, request));
+    }
 
-
-
-    @GetMapping
-    public List<Bot> listBots(HttpServletRequest req) {
-        return botService.getBotsByUser(getUser(req));
+    @PutMapping("/{id}/state")
+    public void toggleState(@PathVariable Long id, HttpServletRequest req) {
+        botService.toggleState(authService.requireUser(req), id);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id, HttpServletRequest req) {
-        botService.delete(getUser(req), id);
-    }
-
-    @PutMapping("/{id}")
-    public Bot update(@PathVariable Long id,
-                      @RequestBody BotRequest request,
-                      HttpServletRequest req) {
-        User user = getUser(req);
-        return botService.update(user, id, request);
-    }
-
-
-    @PutMapping("/{id}/state")
-    public void toggleState(@PathVariable Long id, HttpServletRequest req) {
-        User user = getUser(req);
-        botService.toggleState(user, id);
+        botService.delete(authService.requireUser(req), id);
     }
 }

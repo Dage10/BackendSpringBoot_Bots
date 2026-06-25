@@ -58,7 +58,7 @@ public class BotExecutorService {
                 if (messages.isArray() && !messages.isEmpty()) {
                     String newestId = messages.get(0).get("id").asText();
                     for (JsonNode msg : messages) {
-                        sseService.sendEvent("[DISCORD][" + bot.getName() + "] " + msg.get("content").asText(""));
+                        sseService.sendEvent(bot.getUser().getId(),"[DISCORD][" + bot.getName() + "] " + msg.get("content").asText(""));
                     }
                     cfg.put("lastMessageId", newestId);
                     saveConfig(bot, cfg);
@@ -79,7 +79,7 @@ public class BotExecutorService {
                         .body(body)
                         .retrieve()
                         .toBodilessEntity();
-                sseService.sendEvent("[DISCORD][" + bot.getName() + "] Message sent");
+                sseService.sendEvent(bot.getUser().getId(),"[DISCORD][" + bot.getName() + "] Message sent");
                 cfg.put("message", "");
                 saveConfig(bot, cfg);
             }
@@ -108,7 +108,7 @@ public class BotExecutorService {
                             String chatId = msgNode.get("chat").get("id").asText();
                             String text = msgNode.has("text") ? msgNode.get("text").asText("") : "";
                             if (bot.getTarget().isBlank() || bot.getTarget().equals(chatId)) {
-                                sseService.sendEvent("[TELEGRAM][" + bot.getName() + "] " + text);
+                                sseService.sendEvent(bot.getUser().getId(),"[TELEGRAM][" + bot.getName() + "] " + text);
                             }
                         }
                     }
@@ -132,7 +132,7 @@ public class BotExecutorService {
                         .body(body.toString())
                         .retrieve()
                         .toBodilessEntity();
-                sseService.sendEvent("[TELEGRAM][" + bot.getName() + "] Message sent");
+                sseService.sendEvent(bot.getUser().getId(),"[TELEGRAM][" + bot.getName() + "] Message sent");
                 cfg.put("message", "");
                 saveConfig(bot, cfg);
             }
@@ -162,7 +162,7 @@ public class BotExecutorService {
                 if (posts.isArray() && !posts.isEmpty()) {
                     String newestId = posts.get(0).path("data").get("name").asText();
                     for (JsonNode post : posts) {
-                        sseService.sendEvent("[REDDIT][" + bot.getName() + "] " + post.get("data").get("title").asText(""));
+                        sseService.sendEvent(bot.getUser().getId(),"[REDDIT][" + bot.getName() + "] " + post.get("data").get("title").asText(""));
                     }
                     cfg.put("lastPostId", newestId);
                     saveConfig(bot, cfg);
@@ -183,7 +183,7 @@ public class BotExecutorService {
                         .body("sr=" + bot.getTarget() + "&kind=self&title=" + title + "&text=" + text + "&api_type=json")
                         .retrieve()
                         .toBodilessEntity();
-                sseService.sendEvent("[REDDIT][" + bot.getName() + "] Post sent");
+                sseService.sendEvent(bot.getUser().getId(),"[REDDIT][" + bot.getName() + "] Post sent");
                 cfg.put("title", "");
                 cfg.put("text", "");
                 saveConfig(bot, cfg);
@@ -227,7 +227,7 @@ public class BotExecutorService {
                 for (JsonNode item : items) {
                     String videoId = item.path("id").path("videoId").asText();
                     if (videoId.equals(lastVideoId)) break;
-                    sseService.sendEvent("[YOUTUBE][" + bot.getName() + "] New video: " + item.path("snippet").path("title").asText(""));
+                    sseService.sendEvent(bot.getUser().getId(),"[YOUTUBE][" + bot.getName() + "] New video: " + item.path("snippet").path("title").asText(""));
                 }
                 cfg.put("lastVideoId", newestId);
                 saveConfig(bot, cfg);
@@ -262,14 +262,14 @@ public class BotExecutorService {
         String type  = event.get("type").asText("");
         String actor = event.path("actor").path("login").asText("");
         switch (type) {
-            case "WatchEvent"        -> sseService.sendEvent("[GITHUB][" + bot.getName() + "] Star by " + actor);
-            case "ForkEvent"         -> sseService.sendEvent("[GITHUB][" + bot.getName() + "] Fork by " + actor);
-            case "PushEvent"         -> sseService.sendEvent("[GITHUB][" + bot.getName() + "] " + event.path("payload").path("commits").size() + " commits to " + event.path("payload").path("ref").asText("") + " by " + actor);
-            case "IssuesEvent"       -> sseService.sendEvent("[GITHUB][" + bot.getName() + "] Issue " + event.path("payload").path("action").asText("") + ": " + event.path("payload").path("issue").path("title").asText("") + " by " + actor);
-            case "IssueCommentEvent" -> sseService.sendEvent("[GITHUB][" + bot.getName() + "] Comment by " + actor + ": " + event.path("payload").path("comment").path("body").asText(""));
-            case "PullRequestEvent"  -> sseService.sendEvent("[GITHUB][" + bot.getName() + "] PR " + event.path("payload").path("number").asInt() + " " + event.path("payload").path("action").asText("") + " by " + actor);
-            case "ReleaseEvent"      -> sseService.sendEvent("[GITHUB][" + bot.getName() + "] Release " + event.path("payload").path("release").path("tag_name").asText("") + " by " + actor);
-            default                  -> sseService.sendEvent("[GITHUB][" + bot.getName() + "] " + type + " by " + actor);
+            case "WatchEvent"        -> sseService.sendEvent(bot.getUser().getId(),"[GITHUB][" + bot.getName() + "] Star by " + actor);
+            case "ForkEvent"         -> sseService.sendEvent(bot.getUser().getId(),"[GITHUB][" + bot.getName() + "] Fork by " + actor);
+            case "PushEvent"         -> sseService.sendEvent(bot.getUser().getId(),"[GITHUB][" + bot.getName() + "] " + event.path("payload").path("commits").size() + " commits to " + event.path("payload").path("ref").asText("") + " by " + actor);
+            case "IssuesEvent"       -> sseService.sendEvent(bot.getUser().getId(),"[GITHUB][" + bot.getName() + "] Issue " + event.path("payload").path("action").asText("") + ": " + event.path("payload").path("issue").path("title").asText("") + " by " + actor);
+            case "IssueCommentEvent" -> sseService.sendEvent(bot.getUser().getId(),"[GITHUB][" + bot.getName() + "] Comment by " + actor + ": " + event.path("payload").path("comment").path("body").asText(""));
+            case "PullRequestEvent"  -> sseService.sendEvent(bot.getUser().getId(),"[GITHUB][" + bot.getName() + "] PR " + event.path("payload").path("number").asInt() + " " + event.path("payload").path("action").asText("") + " by " + actor);
+            case "ReleaseEvent"      -> sseService.sendEvent(bot.getUser().getId(),"[GITHUB][" + bot.getName() + "] Release " + event.path("payload").path("release").path("tag_name").asText("") + " by " + actor);
+            default                  -> sseService.sendEvent(bot.getUser().getId(),"[GITHUB][" + bot.getName() + "] " + type + " by " + actor);
         }
     }
 

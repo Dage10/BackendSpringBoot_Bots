@@ -52,15 +52,13 @@ The application is deployed in a real cloud environment using **Vercel**, **Rend
 
 ## 📸 Screenshots
 
-<!-- Replace with your own screenshots -->
 <img width="800" height="400" alt="image" src="https://github.com/user-attachments/assets/a484736e-13c1-4bda-9d31-638736b2e30e" />
 <img width="800" height="400" alt="image" src="https://github.com/user-attachments/assets/c7e2bf5a-1ad4-49ea-90fd-b6a620ecaaac" />
 <img width="800" height="400" alt="image" src="https://github.com/user-attachments/assets/2dcb48a4-481a-427d-a31b-64314b7581d6" />
-
-
-<img width="800" alt="Bot management dashboard" src="YOUR_SCREENSHOT_DASHBOARD" />
-<img width="800" alt="Create bot form" src="YOUR_SCREENSHOT_CREATE" />
-<img width="800" alt="Real-time SSE notification" src="YOUR_SCREENSHOT_SSE" />
+<img width="800" height="400" alt="image" src="https://github.com/user-attachments/assets/6f3bc006-69a9-4029-891a-b02ba4cc1c0b" />
+<img width="800" height="400" alt="image" src="https://github.com/user-attachments/assets/fd310fe7-4d4c-46a8-a123-58338d193ed9" />
+<img width="800" height="400" alt="image" src="https://github.com/user-attachments/assets/1b2e4fb9-9ced-47b7-b9bf-7c32318c48b7" />
+<img width="800" height="400" alt="image" src="https://github.com/user-attachments/assets/fb9eac16-f8fe-4fa2-90be-d0bd84755eac" />
 
 ---
 

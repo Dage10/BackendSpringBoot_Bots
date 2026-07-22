@@ -31,19 +31,19 @@
 
 ## 🌐 Production Deployment
 
-The application is deployed in a real cloud environment using **Vercel**, **Render**, and **Neon**.
+The application is deployed in a real cloud environment using **Vercel**, **Render**, and **Supabase**.
 
 | Component | Provider | URL |
 |-----------|----------|-----|
 | **Frontend (Next.js)** | Vercel | [https://frontend-bots-one.vercel.app](https://frontend-bots-one.vercel.app) |
 | **Backend (Spring Boot)** | Render | [https://backendspringboot-bots.onrender.com](https://backendspringboot-bots.onrender.com) |
-| **Database (PostgreSQL)** | Neon | Serverless cluster on `neon.tech` |
+| **Database (PostgreSQL)** | Supabase | Hosted PostgreSQL + Auth + Storage |
 
 ### 🏗️ Production Infrastructure
 
 - Frontend deployed on **Vercel**.
 - Backend deployed on **Render**.
-- **Neon PostgreSQL** serverless database.
+- Supabase PostgreSQL managed database (with connection pooling).
 - CORS configured between Vercel ↔ Render  
 - Secrets managed in Vercel, Render, and Neon. 
 - All services communicate securely over **HTTPS**

@@ -36,7 +36,7 @@ La aplicación está desplegada en un entorno cloud real utilizando **Vercel**, 
 |-----------|----------|-----|
 | **Frontend (Next.js)** | Vercel | [https://frontend-bots-one.vercel.app](https://frontend-bots-one.vercel.app) |
 | **Backend (Spring Boot)** | Render | [https://backendspringboot-bots.onrender.com](https://backendspringboot-bots.onrender.com) |
-| **Base de Datos (PostgreSQL)** | Supabase | Base de Datos (PostgreSQL) | Supabase | PostgreSQL gestionado (acceso vía JDBC/JPA) |
+| **Base de Datos (PostgreSQL)** | Supabase | PostgreSQL gestionado (acceso vía JDBC/JPA) |
 
 ### 🏗️ Infraestructura de Producción
 

@@ -11,7 +11,7 @@
 ![React](https://img.shields.io/badge/React-19.2.4-61DAFB?style=flat&logo=react&logoColor=black)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat&logo=postgresql&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&logoColor=white)
-![Neon](https://img.shields.io/badge/Neon-PostgreSQL-00E599?style=flat&logo=neon&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-000000?style=flat&logo=supabase&logoColor=white)
 
 ---
 
@@ -30,21 +30,21 @@
 
 ## 🌐 Despliegue en Producción
 
-La aplicación está desplegada en un entorno cloud real utilizando **Vercel**, **Render** y **Neon**.
+La aplicación está desplegada en un entorno cloud real utilizando **Vercel**, **Render** y **Supabase**.
 
 | Componente | Proveedor | URL |
 |-----------|----------|-----|
 | **Frontend (Next.js)** | Vercel | [https://frontend-bots-one.vercel.app](https://frontend-bots-one.vercel.app) |
 | **Backend (Spring Boot)** | Render | [https://backendspringboot-bots.onrender.com](https://backendspringboot-bots.onrender.com) |
-| **Base de Datos (PostgreSQL)** | Neon | Clúster serverless en `neon.tech` |
+| **Base de Datos (PostgreSQL)** | Supabase | Base de Datos (PostgreSQL) | Supabase | PostgreSQL gestionado (acceso vía JDBC/JPA) |
 
 ### 🏗️ Infraestructura de Producción
 
 - Frontend desplegado en **Vercel**.
 - Backend desplegado en **Render**.
-- Base de datos **Neon PostgreSQL** serverless.
+- Base de datos **Supabase PostgreSQL** gestionada (con connection pooling).
 - CORS configurado entre Vercel ↔ Render.
-- Secretos gestionados en Vercel, Render y Neon.
+- Secretos gestionados en Vercel, Render y Supabase.
 - Todos los servicios se comunican de forma segura mediante **HTTPS**.
 
 ---

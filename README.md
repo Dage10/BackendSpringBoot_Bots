@@ -45,7 +45,7 @@ The application is deployed in a real cloud environment using **Vercel**, **Rend
 - Backend deployed on **Render**.
 - Supabase PostgreSQL managed database (with connection pooling).
 - CORS configured between Vercel ↔ Render  
-- Secrets managed in Vercel, Render, and Neon. 
+- Secrets managed in Vercel, Render, and Supabase. 
 - All services communicate securely over **HTTPS**
   
 ---

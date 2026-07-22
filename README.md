@@ -11,7 +11,7 @@
 ![React](https://img.shields.io/badge/React-19.2.4-61DAFB?style=flat&logo=react&logoColor=black)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat&logo=postgresql&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&logoColor=white)
-![Neon](https://img.shields.io/badge/Neon-PostgreSQL-00E599?style=flat&logo=neon&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-000000?style=flat&logo=supabase&logoColor=white)
 
 
 ---

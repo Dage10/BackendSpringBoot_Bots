@@ -6,7 +6,7 @@
 > Full-stack web application to create, configure and monitor automation bots across Discord, Telegram, Reddit, YouTube and GitHub — with real-time notifications via Server-Sent Events (SSE).
 
 ![Java](https://img.shields.io/badge/Java-25-007396?style=flat&logo=openjdk&logoColor=white)
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.0.3-6DB33F?style=flat&logo=springboot&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.0.6-6DB33F?style=flat&logo=springboot&logoColor=white)
 ![Next.js](https://img.shields.io/badge/Next.js-16.2.0-black?style=flat&logo=next.js&logoColor=white)
 ![React](https://img.shields.io/badge/React-19.2.4-61DAFB?style=flat&logo=react&logoColor=black)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat&logo=postgresql&logoColor=white)
